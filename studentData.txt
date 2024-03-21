@@ -1,0 +1,20 @@
+Nguyen Hiep Tai
+10
+Alice
+10
+Mark
+7
+John
+9
+Kennedy
+8
+George Washington
+9
+Davinci
+10
+123
+4.5
+Float Test hehe
+2.34568
+asd
+1
