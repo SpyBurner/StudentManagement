@@ -33,7 +33,7 @@ private:
     //*Max 50 characters per line
     string lines[3] = {
         "",
-        "Lab3 - Nguyen Hiep Tai",
+        "Lab4 - Nguyen Hiep Tai",
         "         @ Hashkell Clowns",
     };
 
