@@ -121,7 +121,7 @@ public:
         }
         // Print exit
         cout << setw(3) << index << ". "; // Print index;
-        cout << "Exit and save" << endl;
+        cout << "Exit" << endl;
 
         cout << endl;
     }
@@ -171,5 +171,95 @@ public:
     }
 };
 
-class MasterMenu : public TextBasedMenu{
+class MasterMenu : public TextBasedMenu {
+private:
+    TextBasedMenu collegeMenu, uniMenu;
+
+    CollegeStudentList colList;
+    UniStudentList uniList;
+
+    void startAMenu(TextBasedMenu subMenu) {
+        while (true) {
+            bool res = subMenu.operate();
+            if (!res)
+                break;
+        }
+    }
+
+public:
+    MasterMenu() {
+        addOption("Manage University students", [this]() -> void { startAMenu(MasterMenu::uniMenu); });
+        addOption("Manage College students", [this]() -> void { startAMenu(MasterMenu::collegeMenu); });
+
+#pragma region Uni Menu
+
+        uniMenu.addOption("Add student", [this]() -> void {
+            this->uniMenu.DrawTextBox("Add student");
+            string name;
+
+            cout << "Student name: " << endl;
+            fflush(stdin);
+            getline(cin, name);
+            UniStudent student(0, name, 8);
+
+            this->uniList.addStudent(student);
+
+            cout << "Added successfully";
+        });
+
+        uniMenu.addOption("Remove student", [this]() -> void {
+            this->uniMenu.DrawTextBox("Remove student");
+            int id;
+            cout << "Student id: " << endl;
+            cin >> id;
+
+            bool res = this->uniList.removeStudentById(id);
+            cout << res ? "Remove successfully" : "Remove unsuccessfully, please check input";
+            waitForEnter();
+        });
+
+        uniMenu.addOption("List student", [this]() -> void {
+            this->uniMenu.DrawTextBox("list student");
+            this->uniList.listStudent();
+            waitForEnter();
+        });
+
+#pragma endregion
+
+#pragma region College Menu
+
+        collegeMenu.addOption("Add student", [this]() -> void {
+            this->collegeMenu.DrawTextBox("Add student");
+            string name;
+
+            cout << "Student name: " << endl;
+            fflush(stdin);
+            getline(cin, name);
+            CollStudent student(0, name, 8);
+
+            this->colList.addStudent(student);
+
+            cout << "Added successfully";
+        });
+
+        collegeMenu.addOption("Remove student", [this]() -> void {
+            this->collegeMenu.DrawTextBox("Remove student");
+            int id;
+            cout << "Student id: " << endl;
+            cin >> id;
+
+            bool res = this->colList.removeStudentById(id);
+            cout << res ? "Remove successfully" : "Remove unsuccessfully, please check input";
+            waitForEnter();
+        });
+
+        collegeMenu.addOption("List student", [this]() -> void {
+            this->collegeMenu.DrawTextBox("list student");
+            this->colList.listStudent();
+            waitForEnter();
+        });
+
+#pragma endregion
+    }
+
 };

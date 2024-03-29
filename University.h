@@ -1,17 +1,22 @@
-#include "TextBasedMenu.h"
 #include <iomanip>
 #include <iostream>
-#include <list>
 
+#include <list>
+#include <unordered_map>
+#include <vector>
 
 using namespace std;
 
 const int tabSpace = 25;
 
+enum ScoreType {
+    ASSIGNMENT,
+    TEST,
+    EXAM
+};
+
 class Semester {
 private:
-    enum ScoreType;
-
     unordered_map<ScoreType, vector<float>> scoreMap;
 
     void insertType(int count, ScoreType type) {
@@ -23,22 +28,20 @@ private:
     }
 
 public:
-    enum ScoreType {
-        ASSIGNMENT,
-        TEST,
-        EXAM
-    };
-
     Semester(int n1, int n2, int n3) {
         insertType(n1, ASSIGNMENT);
         insertType(n2, TEST);
         insertType(n3, EXAM);
+
+        constructByInput();
     }
 
     Semester(vector<int> TEMPLATE) {
         insertType(TEMPLATE[0], ASSIGNMENT);
         insertType(TEMPLATE[1], TEST);
         insertType(TEMPLATE[2], EXAM);
+
+        constructByInput();
     }
 
     ~Semester() {
@@ -105,13 +108,15 @@ public:
     Student(int id, string name) : id(id), name(name) {}
     ~Student() {}
 
+    int setID(int id) { this->id = id; }
+
     int getID() { return id; }
     string getName() { return name; }
 
     Semester getSemesterByID(int semID) {
         semID--;
         if (semID >= semesterList.size() || semID < 1) {
-            throw new exception("ID out of range");
+            throw "ID out of range";
         }
         return semesterList.at(semID);
     }
@@ -182,25 +187,21 @@ public:
     ~CollStudent();
 };
 
-template <class T>
-class StudentList {
-protected:
-    list<T> stList;
-
-    int timelineID = 0;
+class CollegeStudentList {
+private:
+    list<CollStudent> stList;
+    int timelineId = 0;
 
 public:
+    CollegeStudentList() {}
+    ~CollegeStudentList() {}
 
-    StudentList() {}
-    ~StudentList() {
-    }
-
-    void addStudent(T student) {
+    void addStudent(CollStudent student) {
         stList.push_back(student);
     }
 
     bool removeStudentById(int id) {
-        for (list<T>::iterator iter = stList.begin(); iter != stList.end(); ++iter) {
+        for (list<CollStudent>::iterator iter = stList.begin(); iter != stList.end(); ++iter) {
             if (iter->getID() == id) {
                 stList.erase(iter);
                 return true;
@@ -211,7 +212,38 @@ public:
 
     void listStudent() {
         for (auto iter : stList) {
+            iter.print();
         }
     }
 };
 
+class UniStudentList {
+private:
+    list<UniStudent> stList;
+    int timelineId = 0;
+
+public:
+    UniStudentList() {}
+    ~UniStudentList() {}
+
+    void addStudent(UniStudent student) {
+        student.setID(timelineId++);
+        stList.push_back(student);
+    }
+
+    bool removeStudentById(int id) {
+        for (list<UniStudent>::iterator iter = stList.begin(); iter != stList.end(); ++iter) {
+            if (iter->getID() == id) {
+                stList.erase(iter);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void listStudent() {
+        for (auto iter : stList) {
+            iter.print();
+        }
+    }
+};

@@ -2,17 +2,7 @@
     "files.associations": {
         "*.embeddedhtml": "html",
         "list": "cpp",
-        "iostream": "cpp",
-        "xstring": "cpp",
-        "iomanip": "cpp",
-        "ostream": "cpp",
-        "functional": "cpp",
-        "string": "cpp",
-        "utility": "cpp",
-        "iosfwd": "cpp",
         "vector": "cpp",
-        "xhash": "cpp",
-        "unordered_map": "cpp",
-        "xlocale": "cpp"
+        "iostream": "cpp"
     }
 }
