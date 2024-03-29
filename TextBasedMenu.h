@@ -66,8 +66,15 @@ public:
         return true;
     }
 
+    void setLogoLines(string lines[3]) {
+        for (int i = 0; i < 3; ++i) {
+            this->lines[i] = lines[i];
+        }
+    }
+
     //! Text box max text length = 50 per line
     void DrawTextBox(string line) {
+        cout << right;
         // CLear terminal
         cout << flush;
         system("CLS");
@@ -89,6 +96,7 @@ public:
 
     void DrawLogo() {
         // CLear terminal
+        cout << right;
         cout << flush;
         system("CLS");
         cout << message << endl;
@@ -214,7 +222,10 @@ public:
             cin >> id;
 
             bool res = this->uniList.removeStudentById(id);
-            cout << (res) ? "Remove successfully" : "Remove unsuccessfully, please check input";
+            if (res)
+                cout << "Remove successfully";
+            else
+                cout << "Remove unsuccessfully, please check input";
             waitForEnter();
         });
 
@@ -223,6 +234,13 @@ public:
             this->uniList.listStudent();
             waitForEnter();
         });
+
+        string uniMenuLogo[] = {
+            "",
+            "Manage University students",
+            "",
+        };
+        uniMenu.setLogoLines(uniMenuLogo);
 
 #pragma endregion
 
@@ -249,7 +267,10 @@ public:
             cin >> id;
 
             bool res = this->colList.removeStudentById(id);
-            cout << (res) ? "Remove successfully" : "Remove unsuccessfully, please check input";
+            if (res)
+                cout << "Remove successfully";
+            else
+                cout << "Remove unsuccessfully, please check input";
             waitForEnter();
         });
 
@@ -259,7 +280,13 @@ public:
             waitForEnter();
         });
 
+        string colMenuLogo[] = {
+            "",
+            "Manage College students",
+            "",
+        };
+        collegeMenu.setLogoLines(colMenuLogo);
+
 #pragma endregion
     }
-
 };

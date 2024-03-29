@@ -24,9 +24,6 @@ private:
         for (int i = 0; i < count; ++i) {
             temp.push_back(0);
         }
-
-        cout << "Semester " << scoreMap.size() << ": " << endl;
-
         scoreMap.emplace(type, temp);
     }
 
@@ -130,7 +127,6 @@ public:
 
     void addDataToTemplate() {
         for (auto iter = semesterList.begin(); iter < semesterList.end(); ++iter) {
-            cout << "Semester: " << semesterList.end() - iter << endl;
             iter->constructByInput();
         }
     }
@@ -149,7 +145,7 @@ public:
             iter.print();
             cout << endl;
         }
-        cout << "----o----";
+        cout << "----o----\n";
     }
 };
 
@@ -163,6 +159,7 @@ public:
 
     UniStudent(int id, string name, int semCount) : Student(id, name) {
         for (int i = 0; i < semCount; ++i) {
+            cout << "Semester " << i << ": " << endl;
             semesterList.emplace_back(semesterTemplate);
         }
     }
