@@ -1,8 +1,12 @@
 #include "TextBasedMenu.h"
+#include <iomanip>
 #include <iostream>
 #include <list>
 
+
 using namespace std;
+
+const int tabSpace = 25;
 
 class Semester {
 private:
@@ -65,6 +69,28 @@ public:
             scoreMap[EXAM][i] = temp;
         }
     }
+
+    //! INLINE PRINT
+    void print() {
+        cout << "ASSIGNMENT(s): ";
+        for (auto iter : scoreMap[ASSIGNMENT]) {
+            cout << iter << " ";
+        }
+
+        cout << " | ";
+
+        cout << "TEST(s): ";
+        for (auto iter : scoreMap[TEST]) {
+            cout << iter << " ";
+        }
+
+        cout << " | ";
+
+        cout << "EXAM(s): ";
+        for (auto iter : scoreMap[EXAM]) {
+            cout << iter << " ";
+        }
+    }
 };
 
 class Student {
@@ -105,6 +131,18 @@ public:
         semID--;
         semesterList.erase(semesterList.begin() + semID);
     }
+
+    void print() {
+        cout << setw(tabSpace) << left << id
+             << setw(tabSpace) << left << name << endl;
+        int semID = 0;
+        for (auto iter : semesterList) {
+            cout << "Semester " << ++semID << ": ";
+            iter.print();
+            cout << endl;
+        }
+        cout << "----o----";
+    }
 };
 
 class UniStudent : public Student {
@@ -119,7 +157,6 @@ public:
         for (int i = 0; i < semCount; ++i) {
             semesterList.emplace_back(semesterTemplate);
         }
-
     }
 
     ~UniStudent();
@@ -148,7 +185,7 @@ public:
 class StudentList {
 protected:
     string filePath;
-    list<Student *> stList;
+    list<Student> stList;
 
     int timelineID = 0;
 
@@ -160,25 +197,26 @@ public:
         this->filePath = filePath;
     }
     ~StudentList() {
-        for (auto iter : stList) {
-            delete iter;
-        }
     }
 
-    void addStudent(Student* student){
+    void addStudent(Student student) {
         stList.push_back(student);
     }
 
-    void removeStudentById(int id){
-        for (auto iter : stList){
-            if (iter->getID() == id){
-                delete iter;
-                stList.erase(iter)
-                return;
+    bool removeStudentById(int id) {
+        for (list<Student>::iterator iter = stList.begin(); iter != stList.end(); ++iter) {
+            if (iter->getID() == id) {
+                stList.erase(iter);
+                return true;
             }
         }
+        return false;
     }
-    void listStudent();
+
+    void listStudent() {
+        for (auto iter : stList) {
+        }
+    }
     void listBestStudents();
     void saveToFile();
 };
