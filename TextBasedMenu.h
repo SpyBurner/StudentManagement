@@ -33,18 +33,9 @@ private:
     //*Max 50 characters per line
     string lines[3] = {
         "",
-        "Lab4 - Nguyen Hiep Tai",
+        "Lab5 - Nguyen Hiep Tai",
         "         @ Hashkell Clowns",
     };
-
-    string getStudentFromKeyboard() {
-        string student;
-        cout << "Student name : " << endl;
-        fflush(stdin);
-        getline(cin, student);
-        fflush(stdin);
-        return student;
-    }
 
     bool printOptions = true;
 
@@ -175,128 +166,5 @@ public:
     void removeOption(int index) {
         optionList.erase(optionList.begin() + index);
         optionCount--;
-    }
-};
-
-class StudentList;
-
-class Student {
-private:
-
-    string name;
-    float score;
-public:
-    Student() {
-        name = "";
-        score = 0;
-    }
-    Student(string st, float fl) {
-        name = st;
-        score = fl;
-    }
-    ~Student() {
-    }
-    friend StudentList;
-};
-
-class StudentList {
-private:
-    const int BlockSize = 32;
-    int size = 32;
-    int count = 0;
-    Student **studentList;
-
-    void ensureCapacity(int newSize) {
-        if (newSize < size)
-            return;
-        size = (newSize + 32) / 32 * 32;
-        Student **data = new Student*[size];
-        for (int i = 0; i < count; ++i) {
-            data[i] = studentList[i];
-        }
-        delete[] studentList;
-        studentList = data;
-    }
-
-public:
-    StudentList() {
-        studentList = new Student*[size];
-    }
-    ~StudentList() {
-        for (int i = 0; i < count; ++i) {
-            delete studentList[i];
-        }
-
-        delete[] studentList;
-    }
-
-    int getSize() { return count; }
-    void printStudents() {
-        for (int i = 0; i < count; ++i) {
-            cout << left << setw(setwSpace) << studentList[i]->name << right << setw(setwSpace) << studentList[i]->score << endl;
-        }
-    }
-    void printBest() {
-        float maxScore = studentList[0]->score;
-        vector<Student*> res;
-
-        for (int i = 0; i < count; ++i) {
-            if (studentList[i]->score == maxScore)
-                res.push_back(studentList[i]);
-            if (studentList[i]->score > maxScore) {
-                maxScore = studentList[i]->score;
-                res.clear();
-                res.push_back(studentList[i]);
-            }
-        }
-        for (auto iter : res) {
-            cout << left << setw(setwSpace) << iter->name << right << setw(setwSpace) << iter->score << endl;
-        }
-    }
-
-    void dumpToFile(string filename) {
-        ofstream outfile(filename);
-        for (int i = 0; i < count; ++i) {
-            outfile << studentList[i]->name << endl
-                    << studentList[i]->score << endl;
-        }
-        outfile.close();
-    }
-
-    void push(string name, float score) {
-        ensureCapacity(count + 1);
-        studentList[count] = new Student(name, score);
-        count++;
-    }
-
-    void updateScore(string name, float newScore) {
-        int index = 0;
-        for (index = 0; index < count; ++index) {
-            if (studentList[index]->name == name)
-                break;
-        }
-        studentList[index]->score = newScore;
-    }
-
-
-    //TODO pointer remove
-    bool remove(string name) {
-        int index = 0;
-        bool found = false;
-        for (index = 0; index < count; ++index) {
-            if (studentList[index]->name == name) {
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-            return false;
-
-        for (index; index < count; ++index) {
-            studentList[index] = studentList[index + 1];
-        }
-        count--;
-        return true;
     }
 };

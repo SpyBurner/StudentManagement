@@ -1,14 +1,9 @@
-#include "University.h"
+#include<iostream>
+#include<vector>
 
-int main(int argc, char const *argv[]) {
+using namespace std;
 
-    University uni;
-
-    while (true) {
-        bool work = uni.operate();
-        if (!work)
-            break;
-    }
-
+int main(){
+    
     return 0;
 }

@@ -1,113 +1,149 @@
 #include "TextBasedMenu.h"
+#include <iostream>
+#include <list>
 
-class University {
+using namespace std;
+
+class Semester {
 private:
-    TextBasedMenu menu;
-    StudentList stList;
+    enum ScoreType;
 
-    //*Operations
-    void AddStudent() {
-        menu.DrawTextBox("Add student");
-        string name;
-        float score;
+    unordered_map<ScoreType, vector<float>> scoreMap;
 
-        cout << "Input student name: ";
-        fflush(stdin);
-        getline(cin, name);
-
-        cout << "Input student score (float): ";
-        fflush(stdin);
-        cin >> score;
-
-        stList.push(name, score);
-
-        menu.DrawTextBox("Add student");
-        cout << "Added successfully!";
-        TextBasedMenu::waitForEnter();
-    }
-
-    void RemoveStudent() {
-        menu.DrawTextBox("Remove student");
-        string name;
-        float score;
-
-        cout << "Input student name: ";
-        fflush(stdin);
-        getline(cin, name);
-
-        bool res = stList.remove(name);
-
-        menu.DrawTextBox("Remove student");
-        if (res)
-            cout << "Remove successfully!";
-        else
-            cout << "Remove failed!";
-        TextBasedMenu::waitForEnter();
-    }
-
-    void ListStudent() {
-        menu.DrawTextBox("List students");
-        if (stList.getSize() == 0) {
-            cout << "Nothing here...";
-
-        } else {
-            cout << left << setw(setwSpace) << "Name" << right << setw(setwSpace) << "Score" << endl;
-            stList.printStudents();
+    void insertType(int count, ScoreType type) {
+        vector<float> temp;
+        for (int i = 0; i < count; ++i) {
+            temp.push_back(0);
         }
-
-        TextBasedMenu::waitForEnter();
-    }
-
-    void DisplayBestStudent() {
-        menu.DrawTextBox("Best students");
-
-        if (stList.getSize() == 0) {
-            cout << "Nothing here...";
-
-        } else {
-            cout << left << setw(setwSpace) << "Name" << right << setw(setwSpace) << "Score" << endl;
-            stList.printBest();
-        }
-
-        TextBasedMenu::waitForEnter();
+        scoreMap.emplace(type, temp);
     }
 
 public:
-    University() {
-        //*Read students from file
-        ifstream file("studentData.txt");
+    enum ScoreType {
+        ASSIGNMENT,
+        TEST,
+        EXAM
+    };
 
-        // File doesnt exist
-        if (!file.is_open()) {
-            file.close();
-            ofstream temp("studentData.txt");
-            temp << "\0";
-            temp.close();
-            file.open("studentData.txt");
+    Semester(int n1, int n2, int n3) {
+        insertType(n1, ASSIGNMENT);
+        insertType(n2, TEST);
+        insertType(n3, EXAM);
+    }
+
+    ~Semester(){
+        scoreMap.clear();
+    }
+
+    void constructByInput(){
+        float temp;
+
+        cout << "Input " << scoreMap[ASSIGNMENT].size() << " ASSIGNMENT score(s), separated by spaces: ";
+        for (int i = 0; i < scoreMap[ASSIGNMENT].size(); ++i){
+            cin >> temp;
+            scoreMap[ASSIGNMENT][i] = temp;
         }
 
-        while (!file.eof()) {
-            string student;
-            string score;
-            getline(file, student);
-            getline(file, score);
-            if (student.empty())
-                break;
-            stList.push(student, stof(score));
+        cout << "Input " << scoreMap[TEST].size() << " TEST score(s), separated by spaces: ";
+        for (int i = 0; i < scoreMap[TEST].size(); ++i){
+            cin >> temp;
+            scoreMap[TEST][i] = temp;
         }
 
-        file.close();
+        cout << "Input " << scoreMap[EXAM].size() << " EXAM score(s), separated by spaces: ";
+        for (int i = 0; i < scoreMap[EXAM].size(); ++i){
+            cin >> temp;
+            scoreMap[EXAM][i] = temp;
+        }
+    }
+};
 
-        menu.addOption("Add student", [&]() { AddStudent(); });
-        menu.addOption("Remove student", [&]() { RemoveStudent(); });
-        menu.addOption("List students", [&]() { ListStudent(); });
-        menu.addOption("Display best student(s)", [&]() { DisplayBestStudent(); });
-    }
-    ~University() {
-        stList.dumpToFile("studentData.txt");
+class Student {
+protected:
+    int id;
+    string name;
+
+    vector<Semester> semesterList;
+public:
+    Student() {}
+    Student(int id, string name) : id(id), name(name) {}
+    ~Student() {}
+
+    int getID() { return id; }
+    string getName() { return name; }
+
+    void addSemester(Semester semester){
+        semesterList.push_back(semester);
     }
 
-    bool operate() {
-        return menu.operate();
+    Semester getSemesterByID(int semID){
+        semID--;
+        if (semID >= semesterList.size() || semID < 1){
+            throw new exception("ID out of range");
+        }
+        return semesterList.at(semID);
     }
+
+    virtual void addSemesterByInput();
+    void removeSemesterByID(int semID){
+        semID--;
+        semesterList.erase(semesterList.begin() + semID);
+    }
+
+};
+
+class UniStudent : public Student {
+private:
+    vector<int> semesterTemplate = {3, 2, 1};
+
+public:
+    UniStudent() : Student() {
+    }
+
+    UniStudent(int id, string name) : Student(id, name) {
+    }
+
+    ~UniStudent();
+
+
+};
+
+class CollStudent : public Student {
+private:
+    vector<int> semesterTemplate = {1, 1, 1};
+
+    
+public:
+    CollStudent() : Student() {
+    }
+
+    CollStudent(int id, string name) : Student(id, name) {
+    }
+
+    ~CollStudent();
+};
+
+class StudentList {
+protected:
+    string filePath;
+    list<Student *> stList;
+
+public:
+    template <class T>
+
+    StudentList() {}
+    StudentList(string filePath) {
+        this->filePath = filePath;
+    }
+    ~StudentList() {
+        for (auto iter : stList) {
+            delete iter;
+        }
+    }
+
+    virtual void addStudent(Student *);
+    virtual void removeStudentById(int id);
+    virtual void listStudent();
+    virtual void listBestStudents();
+    virtual void saveToFile();
 };
