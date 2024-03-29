@@ -182,29 +182,25 @@ public:
     ~CollStudent();
 };
 
+template <class T>
 class StudentList {
 protected:
-    string filePath;
-    list<Student> stList;
+    list<T> stList;
 
     int timelineID = 0;
 
 public:
-    template <class T>
 
     StudentList() {}
-    StudentList(string filePath) {
-        this->filePath = filePath;
-    }
     ~StudentList() {
     }
 
-    void addStudent(Student student) {
+    void addStudent(T student) {
         stList.push_back(student);
     }
 
     bool removeStudentById(int id) {
-        for (list<Student>::iterator iter = stList.begin(); iter != stList.end(); ++iter) {
+        for (list<T>::iterator iter = stList.begin(); iter != stList.end(); ++iter) {
             if (iter->getID() == id) {
                 stList.erase(iter);
                 return true;
@@ -217,6 +213,5 @@ public:
         for (auto iter : stList) {
         }
     }
-    void listBestStudents();
-    void saveToFile();
 };
+

@@ -10,12 +10,14 @@
 #include <iomanip>
 #include <stdlib.h> //*For clearing terminal
 
+#include "University.h"
+
 using namespace std;
 
 static const int setwSpace = 30;
 
 class TextBasedMenu {
-private:
+protected:
     //?Options
     class Option {
     public:
@@ -167,4 +169,7 @@ public:
         optionList.erase(optionList.begin() + index);
         optionCount--;
     }
+};
+
+class MasterMenu : public TextBasedMenu{
 };
