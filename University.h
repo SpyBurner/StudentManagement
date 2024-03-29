@@ -24,6 +24,9 @@ private:
         for (int i = 0; i < count; ++i) {
             temp.push_back(0);
         }
+
+        cout << "Semester " << scoreMap.size() << ": " << endl;
+
         scoreMap.emplace(type, temp);
     }
 

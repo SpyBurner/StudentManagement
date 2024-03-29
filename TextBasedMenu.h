@@ -214,7 +214,7 @@ public:
             cin >> id;
 
             bool res = this->uniList.removeStudentById(id);
-            cout << res ? "Remove successfully" : "Remove unsuccessfully, please check input";
+            cout << (res) ? "Remove successfully" : "Remove unsuccessfully, please check input";
             waitForEnter();
         });
 
@@ -249,7 +249,7 @@ public:
             cin >> id;
 
             bool res = this->colList.removeStudentById(id);
-            cout << res ? "Remove successfully" : "Remove unsuccessfully, please check input";
+            cout << (res) ? "Remove successfully" : "Remove unsuccessfully, please check input";
             waitForEnter();
         });
 
