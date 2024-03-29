@@ -108,7 +108,7 @@ public:
     Student(int id, string name) : id(id), name(name) {}
     ~Student() {}
 
-    int setID(int id) { this->id = id; }
+    void setID(int id) { this->id = id; }
 
     int getID() { return id; }
     string getName() { return name; }
@@ -164,7 +164,7 @@ public:
         }
     }
 
-    ~UniStudent();
+    ~UniStudent(){}
 };
 
 class CollStudent : public Student {
@@ -184,7 +184,7 @@ public:
         }
     }
 
-    ~CollStudent();
+    ~CollStudent(){}
 };
 
 class CollegeStudentList {
